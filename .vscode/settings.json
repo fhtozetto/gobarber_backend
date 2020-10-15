@@ -1,0 +1,23 @@
+{
+    "cSpell.words": [
+        "booked",
+        "readonly",
+        "varchar"
+    ],
+    "cSpell.ignoreWords": [
+        "apoointments",
+        "downlevel",
+        "esnext",
+        "gobarber",
+        "gostack",
+        "originalname",
+        "postgres",
+        "sourcemap",
+        "tslib",
+        "typechecking",
+        "typeorm",
+        "uuid",
+        "uuidv"
+    ],
+    "eslint.enable": true
+}
