@@ -17,6 +17,7 @@
         "postgres",
         "sourcemap",
         "tslib",
+        "tsyringe",
         "typechecking",
         "typeorm",
         "uuid",
