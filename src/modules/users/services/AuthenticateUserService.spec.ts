@@ -5,21 +5,28 @@ import FakeHashRepository from '../providers/HashProvider/fakes/FakeHashProvider
 import AuthenticateUserService from './AuthenticateUserService';
 import CreateUserService from './CreateUserService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashRepository: FakeHashRepository;
+let createUserService: CreateUserService;
+let authenticateUser: AuthenticateUserService;
+
 describe('AuthenticateUser', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashRepository = new FakeHashRepository();
+
+    createUserService = new CreateUserService(
+      fakeUsersRepository,
+      fakeHashRepository,
+    );
+
+    authenticateUser = new AuthenticateUserService(
+      fakeUsersRepository,
+      fakeHashRepository,
+    );
+  });
+
   it('should be able to authenticate', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashRepository = new FakeHashRepository();
-
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashRepository,
-    );
-
-    const authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashRepository,
-    );
-
     const user = await createUserService.execute({
       name: 'John Doe',
       email: 'johndo@example.com',
@@ -36,15 +43,7 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate with non existing user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashRepository = new FakeHashRepository();
-
-    const authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashRepository,
-    );
-
-    expect(
+    await expect(
       authenticateUser.execute({
         email: 'johndo@example.com',
         password: '123456',
@@ -53,26 +52,13 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate with wrong password', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashRepository = new FakeHashRepository();
-
-    const createUserService = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashRepository,
-    );
-
-    const authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashRepository,
-    );
-
     await createUserService.execute({
       name: 'John Doe',
       email: 'johndo@example.com',
       password: '123456',
     });
 
-    expect(
+    await expect(
       authenticateUser.execute({
         email: 'johndo@example.com',
         password: 'wrong-password',
